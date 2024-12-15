@@ -11,9 +11,10 @@ export default function Home() {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get('/api/memes');
+            const response = await axios.get('/api/memes', {
+                timeout: 10000, // 10 second timeout
+            });
 
-            // Additional validation
             if (response.data.error) {
                 throw new Error(response.data.error);
             }
@@ -21,20 +22,23 @@ export default function Home() {
             setMeme(response.data);
         } catch (error) {
             console.error('Fetch Error:', error);
-            setError(error.response?.data?.error || error.message || 'Unknown error');
+            setError(
+                error.response?.data?.details || error.response?.data?.error || error.message || 'Failed to fetch meme'
+            );
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
             <Head>
-                <title>Reddit Meme Fetcher</title>
+                <title>Meme Fetcher</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
             <div className="text-center max-w-md w-full">
-                <h1 className="text-3xl font-bold mb-6 text-gray-800">Reddit Meme Fetcher</h1>
+                <h1 className="text-3xl font-bold mb-6 text-gray-800">Meme Fetcher</h1>
 
                 <button
                     onClick={fetchMeme}
@@ -63,12 +67,12 @@ export default function Home() {
                                 className="w-full max-h-[500px] object-contain"
                                 onError={e => {
                                     e.target.onerror = null;
-                                    e.target.src = '/placeholder.png'; // Add a placeholder image
+                                    e.target.src = '/placeholder.png';
                                 }}
                             />
                         )}
 
-                        <div className="p-4 text-gray-600">From r/{meme.subreddit}</div>
+                        <div className="p-4 text-gray-600">Source: {meme.subreddit}</div>
                     </div>
                 )}
             </div>
