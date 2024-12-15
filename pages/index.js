@@ -51,23 +51,23 @@ const MemeViewer = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-pink-50 p-4 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-pink-50 flex items-center justify-center">
             <Head>
                 <title>Meme API - Get Random Memes every 10seconds</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div className="w-full max-w-md">
+            <div className="w-96 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 {error && (
-                    <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl mb-4 text-sm shadow-sm">
+                    <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl mb-4 text-sm">
                         {error}
                     </div>
                 )}
 
-                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 backdrop-blur-sm bg-white/80">
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
                     {loading && !meme ? (
-                        <div className="h-64 flex items-center justify-center">
+                        <div className="h-80 flex items-center justify-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-4 border-indigo-500 border-t-transparent"></div>
                         </div>
                     ) : meme ? (
@@ -76,7 +76,7 @@ const MemeViewer = () => {
                                 <img
                                     src={meme.image}
                                     alt={meme.name}
-                                    className="w-full h-64 object-contain bg-gray-50"
+                                    className="w-96 h-80 object-contain bg-gray-50"
                                     onError={e => {
                                         e.target.onerror = null;
                                         e.target.src = '/placeholder.png';
@@ -84,14 +84,14 @@ const MemeViewer = () => {
                                 />
                                 <button
                                     onClick={handleDownload}
-                                    className="absolute bottom-3 right-3 p-2 rounded-full bg-black/75 hover:bg-black/90 text-white transition-all duration-300 shadow-lg backdrop-blur-sm"
+                                    className="absolute bottom-3 right-3 p-2 rounded-full bg-black/75 hover:bg-black/90 text-white"
                                     aria-label="Download meme"
                                 >
                                     <Download className="w-5 h-5" />
                                 </button>
                             </div>
 
-                            <div className="px-4 py-3 bg-gradient-to-b from-gray-50 to-white border-t border-gray-100">
+                            <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
                                 <div className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">{meme.name}</div>
                                 <div className="text-xs text-gray-500">r/{meme.subreddit}</div>
                             </div>
