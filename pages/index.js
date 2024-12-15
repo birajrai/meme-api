@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Download } from 'lucide-react';
 import Head from 'next/head';
-
+import '../styles/globals.css';
 const MemeViewer = () => {
     const [meme, setMeme] = useState(null);
     const [loading, setLoading] = useState(false);
