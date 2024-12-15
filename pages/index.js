@@ -12,10 +12,16 @@ export default function Home() {
         setError(null);
         try {
             const response = await axios.get('/api/memes');
+
+            // Additional validation
+            if (response.data.error) {
+                throw new Error(response.data.error);
+            }
+
             setMeme(response.data);
         } catch (error) {
-            console.error('Error:', error);
-            setError('Failed to fetch meme. Try again.');
+            console.error('Fetch Error:', error);
+            setError(error.response?.data?.error || error.message || 'Unknown error');
         }
         setLoading(false);
     };
@@ -48,10 +54,18 @@ export default function Home() {
 
                 {meme && (
                     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <h2 className="text-xl font-semibold p-4 bg-gray-100">{meme.name}</h2>
+                        <h2 className="text-xl font-semibold p-4 bg-gray-100 break-words">{meme.name}</h2>
 
                         {meme.image && (
-                            <img src={meme.image} alt={meme.name} className="w-full max-h-[500px] object-contain" />
+                            <img
+                                src={meme.image}
+                                alt={meme.name}
+                                className="w-full max-h-[500px] object-contain"
+                                onError={e => {
+                                    e.target.onerror = null;
+                                    e.target.src = '/placeholder.png'; // Add a placeholder image
+                                }}
+                            />
                         )}
 
                         <div className="p-4 text-gray-600">From r/{meme.subreddit}</div>
